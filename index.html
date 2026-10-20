@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1E2A44">
+  <meta name="description" content="Записывай домашние задания и получай напоминания о сроках">
+  <title>Домашка под контролем</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <img src="icons/icon-192.png" alt="" width="40" height="40">
+      <div>
+        <h1>Домашка под контролем</h1>
+        <p id="today-line" class="muted-light"></p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Напоминание -->
+    <section id="reminder" class="banner" hidden>
+      <div>
+        <strong>🔔 Напоминание!</strong>
+        <p id="reminder-text"></p>
+      </div>
+      <button id="reminder-close" class="ghost" aria-label="Закрыть">✕</button>
+    </section>
+
+    <!-- Добавить задание -->
+    <section class="card">
+      <h2>➕ Новое задание</h2>
+      <form id="add-form" autocomplete="off">
+        <label>Предмет
+          <input id="subject" list="subjects" required maxlength="50" placeholder="Например, Алгебра">
+          <datalist id="subjects">
+            <option>Алгебра</option><option>Геометрия</option><option>Русский язык</option>
+            <option>Литература</option><option>Английский язык</option><option>Физика</option>
+            <option>Химия</option><option>Биология</option><option>История</option>
+            <option>География</option><option>Информатика</option><option>Обществознание</option>
+          </datalist>
+        </label>
+        <label>Что задано
+          <input id="text" required maxlength="300" placeholder="№ 215, 216 или «выучить стих»">
+        </label>
+        <div class="field">
+          <span>К какому дню</span>
+          <div class="chips" id="quick-due">
+            <button type="button" data-due="завтра">Завтра</button>
+            <button type="button" data-due="послезавтра">Послезавтра</button>
+            <button type="button" data-due="1">Пн</button>
+            <button type="button" data-due="2">Вт</button>
+            <button type="button" data-due="3">Ср</button>
+            <button type="button" data-due="4">Чт</button>
+            <button type="button" data-due="5">Пт</button>
+            <button type="button" data-due="неделя">Через неделю</button>
+          </div>
+          <input id="due" type="date" required>
+        </div>
+        <button class="primary" type="submit">Записать</button>
+      </form>
+    </section>
+
+    <!-- Список -->
+    <section class="card">
+      <div class="list-head">
+        <h2>📋 Задания</h2>
+        <div class="tabs" role="tablist">
+          <button role="tab" data-filter="tomorrow" class="active">К завтра</button>
+          <button role="tab" data-filter="all">Все</button>
+          <button role="tab" data-filter="done">Сделано</button>
+        </div>
+      </div>
+      <ul id="list" class="list"></ul>
+      <p id="empty" class="empty" hidden></p>
+    </section>
+
+    <!-- Итоги недели -->
+    <section class="card">
+      <h2>📊 Итоги недели</h2>
+      <p id="week-range" class="muted"></p>
+      <div class="stats">
+        <div><b id="st-total">0</b><span>всего</span></div>
+        <div class="good"><b id="st-ontime">0</b><span>вовремя</span></div>
+        <div class="warn"><b id="st-late">0</b><span>с опозданием</span></div>
+        <div class="bad"><b id="st-missed">0</b><span>просрочено</span></div>
+      </div>
+    </section>
+
+    <!-- Настройки -->
+    <section class="card">
+      <h2>⏰ Напоминания</h2>
+      <label class="row">Напоминать каждый день в
+        <input id="remind-time" type="time" required>
+      </label>
+      <p class="muted">В это время приложение покажет, что нужно сделать к завтра. Уведомление придёт, если приложение открыто или установлено на телефон.</p>
+      <button id="notify-btn" class="secondary" type="button">Разрешить уведомления</button>
+      <p id="notify-state" class="muted"></p>
+    </section>
+  </main>
+
+  <footer class="muted">Данные хранятся только на этом устройстве · Проект Джасимова Армана, 8 «Б», ГБОУ школа № 206</footer>
+
+  <template id="task-tpl">
+    <li class="task">
+      <div class="task-main">
+        <button class="check" aria-label="Отметить выполненным"></button>
+        <div class="task-body">
+          <p class="task-title"><b class="subj"></b> <span class="txt"></span></p>
+          <p class="due"></p>
+          <p class="progress" hidden></p>
+        </div>
+        <button class="more ghost" aria-label="Шаги">⋯</button>
+      </div>
+      <div class="steps" hidden>
+        <ul class="step-list"></ul>
+        <form class="step-form">
+          <input placeholder="Новый шаг" maxlength="100">
+          <button type="submit" class="secondary">+</button>
+        </form>
+        <div class="step-actions">
+          <button type="button" class="ghost split">Разбить на 4 шага</button>
+          <button type="button" class="ghost danger delete">Удалить задание</button>
+        </div>
+      </div>
+    </li>
+  </template>
+
+  <script src="js/logic.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
